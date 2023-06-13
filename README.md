@@ -48,3 +48,5 @@ ALTER TABLE USER_INFO ADD UNIQUE (USERNAME);
 
 Link to postman collection
 https://elements.getpostman.com/redirect?entityId=27918751-e8a8754d-6c1f-45dd-977d-2c71e3d6b6e0&entityType=collection
+
+Also please note that in real world use case proper exception config should be maintained and proper business validations should be added. This is just the basic prototype.
