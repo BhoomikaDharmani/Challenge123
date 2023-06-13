@@ -1,4 +1,13 @@
-C:\Users\hp\Downloads\challenge\challenge\src\main\java\model\User.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\model\ImageUploadModel.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\controller\UserController.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\model\ImgurData.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\config\SwaggerConfig.java
 C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\ChallengeApplication.java
-C:\Users\hp\Downloads\challenge\challenge\src\main\java\repository\UserRepository.java
-C:\Users\hp\Downloads\challenge\challenge\src\main\java\controller\UserController.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\model\ImgurUploadResponse.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\model\UserInfo.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\service\UserService.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\util\PasswordUtil.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\repository\UserRepository.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\repository\ImageMappingRepository.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\model\ImageMapping.java
+C:\Users\hp\Downloads\challenge\challenge\src\main\java\com\synchrony\challenge\service\ImgurService.java

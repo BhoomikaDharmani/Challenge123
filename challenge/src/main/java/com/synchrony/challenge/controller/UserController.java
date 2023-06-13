@@ -2,7 +2,9 @@ package com.synchrony.challenge.controller;
 
 import java.util.List;
 
+import org.apache.kafka.common.errors.DuplicateResourceException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,10 +43,14 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public UserInfo createUser(@RequestBody UserInfo user) {
+	public ResponseEntity<String> createUser(@RequestBody UserInfo user) {
 		System.out.println("inside create user");
 		
-		return userService.createUser(user);
+		 try{userService.createUser(user);}
+		 catch(DuplicateResourceException e) {
+			 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Duplicate user name");
+		 }
+		 return ResponseEntity.ok("User created successfully");
 	}
 	
 	@GetMapping

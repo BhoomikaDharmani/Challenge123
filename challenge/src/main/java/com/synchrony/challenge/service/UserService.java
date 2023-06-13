@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.synchrony.challenge.model.UserInfo;
 import com.synchrony.challenge.repository.UserRepository;
+import com.synchrony.challenge.util.PasswordUtil;
 
 @Service
 public class UserService {
@@ -26,6 +27,9 @@ public class UserService {
 		if(userNames.contains(userName)) {
 			throw new DuplicateResourceException("userName is duplicate");
 		}
+		
+		String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
+		user.setPassowrd(hashedPassword);
 		return userRepository.save(user);
 	}
 	
@@ -39,7 +43,9 @@ public class UserService {
 		if(user == null) {
 			return false;
 		}
-		return user.getUserName().trim().equals(userName.trim()) && user.getPassword().trim().equals(password.trim());
+		//return user.getUserName().trim().equals(userName.trim()) && user.getPassword().trim().equals(password.trim());
+		return user.getUserName().trim().equals(userName.trim()) && PasswordUtil.isPasswordValid(password, user.getPassword());
+
 	}
 	
 	public UserInfo getUserByName(String userName) {
