@@ -3,6 +3,7 @@ package com.synchrony.challenge.service;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ByteArrayResource;
@@ -25,7 +26,8 @@ import com.synchrony.challenge.model.ImgurUploadResponse;
 
 @Service
 public class ImgurService {
-	
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ImgurService.class);
+
 	@Value("$(imgur.clientId")
 	private String clientId;
 	@Value("$(imgur.clientSecret")
@@ -42,7 +44,8 @@ public class ImgurService {
 	}
 
 	public ImgurUploadResponse uploadIMAGE(MultipartFile imageBytes) throws IOException {
-		
+		logger.info("inside ImgurService.uploadImage");
+
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -78,11 +81,16 @@ public class ImgurService {
 	}
 	
 	private String getFileExtention(String originalFilename) {
-		// TODO Auto-generated method stub
+		logger.info("inside ImgurService.getFileExtention");
 		return originalFilename.split(".").toString();
 	}
 
+	//TODO For deleteImage and getImage an access token is required, which Imgur.com is
+	//not allowing to generation (getting 429 status code). So if that is available then 
+	//it can be added in header and this api will work fine.
 	public void deleteImage(String imageDeleteHash) {
+		logger.info("inside ImgurService.deleteImage");
+
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("Authorization", "Client-ID"+clientId);
@@ -96,6 +104,8 @@ public class ImgurService {
 	}
 	
 	public ImgurUploadResponse viewImage(String imageId) {
+		logger.info("inside ImgurService.viewImage");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Client-ID"+clientId);
 		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);

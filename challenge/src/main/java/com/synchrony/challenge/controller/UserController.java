@@ -2,7 +2,10 @@ package com.synchrony.challenge.controller;
 
 import java.util.List;
 
+import org.apache.kafka.common.errors.DuplicateResourceException;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/v1/user",produces = "application/json")
 @Slf4j
 public class UserController {
+	
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private final UserService userService;
 	private final ImgurService imgurService;
@@ -41,19 +46,26 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public UserInfo createUser(@RequestBody UserInfo user) {
-		System.out.println("inside create user");
+	public ResponseEntity<String> createUser(@RequestBody UserInfo user) {
+		logger.info("inside UserController.createUser");
 		
-		return userService.createUser(user);
+		 try{userService.createUser(user);}
+		 catch(DuplicateResourceException e) {
+			 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Duplicate user name");
+		 }
+		 return ResponseEntity.ok("User created successfully");
 	}
 	
 	@GetMapping
 	public List<UserInfo> getUser() {
+		logger.info("inside getUser");
 		return userService.getUsers();
 	}
 	
 	@GetMapping("/allImages/{userName}/{password}")
 	public ResponseEntity<List<ImageMapping>> getUserImages(@PathVariable String userName,@PathVariable String password){
+		logger.info("inside UserController.getUserImages");
+
 		boolean verifyUser = userService.verifyUser(userName, password);
 		if(!verifyUser) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -68,7 +80,7 @@ public class UserController {
 	
 	@PostMapping("/imageUpload/{userName}/{password}")
 	public ResponseEntity<ImgurUploadResponse> uploadImage(@PathVariable String userName, @PathVariable String password, @RequestBody MultipartFile imageUploadModel){
-		
+		logger.info("inside UserController.uploadImage");
 		boolean verifyUser = userService.verifyUser(userName, password);
 		if(!verifyUser) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -94,6 +106,7 @@ public class UserController {
 	 * @param imageResponse
 	 */
 	private void saveUserImageInfo(String userName, ImgurUploadResponse imageResponse) {
+		logger.info("inside UserController.saveUserImageInfo");
 		String imageId = imageResponse.getData().getId();
 		String imageDeleteHash = imageResponse.getData().getDeletehash();
 		UserInfo userInfo = userService.getUserByName(userName);
@@ -106,6 +119,7 @@ public class UserController {
 	
 	@GetMapping(value = "/getImage/{imageHash}",produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<ImgurUploadResponse> getImage(@PathVariable   String imageHash){
+		logger.info("inside UserController.getImage");
 		ImgurUploadResponse imageByte = imgurService.viewImage(imageHash);
 	      return ResponseEntity.ok(imageByte);
 	      
@@ -114,6 +128,7 @@ public class UserController {
 	@DeleteMapping("/deleteImage/{imageDeleteHash}")
 	@Transactional
 	public ResponseEntity<Void> deleteImage(@PathVariable  String imageDeleteHash,@RequestParam  String userName,@RequestParam  String password) {
+		logger.info("inside UserController.deleteImage");
 		boolean verifyUser = userService.verifyUser(userName, password);
 		if(!verifyUser) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
